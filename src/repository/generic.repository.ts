@@ -1,12 +1,14 @@
 import { BaseRecord, Database } from "../database";
 import { IRead, IWrite } from "./interfaces/type";
 
-export class GenericRepository<T extends BaseRecord> implements IWrite<T>, IRead<T> {
+export class GenericRepository<T extends BaseRecord>
+  implements IWrite<T>, IRead<T>
+{
   constructor(readonly database: Database<T>) {}
 
   async read(item: T): Promise<T[]> {
     try {
-      return await this.database.find(item) as unknown as T[];
+      return (await this.database.find(item)) as unknown as T[];
     } catch (error) {
       throw new Error("Method not implemented.");
     }
@@ -23,7 +25,7 @@ export class GenericRepository<T extends BaseRecord> implements IWrite<T>, IRead
 
   async readOne(id: number): Promise<T> {
     try {
-      return await this.database.get(id) as T;
+      return (await this.database.get(id)) as T;
     } catch (error) {
       throw error;
     }

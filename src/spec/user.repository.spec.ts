@@ -48,9 +48,6 @@ describe("user repository", () => {
     
     done();
   });
-  
-
-  
 
   afterEach(() => {
     userRepo.database.clear();
