@@ -47,4 +47,8 @@ export class GenericRepository<T extends BaseRecord>
   async readAll(): Promise<T[]> {
     return await this.database.getAll();
   }
+
+  async find(entity: Partial<T>): Promise<T[]> {
+    return await this.database.find(entity);
+  }
 }

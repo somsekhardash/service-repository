@@ -15,10 +15,7 @@ export class UserController {
         ...user,
         display: user.displayName,
       }));
-      return {
-        data: users,
-        success: true,
-      };
+      return users;
     } catch (error) {
       throw new Error(error);
     }

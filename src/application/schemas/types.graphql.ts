@@ -19,7 +19,6 @@ export default gql`
     details: String
     paidDate: String
     nextDate: String
-    type: String
     isCompleted: Boolean
     title: String
     eventid: ID

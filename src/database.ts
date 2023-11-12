@@ -75,7 +75,7 @@ export class Database<T extends BaseRecord> implements IDatabase<T> {
     return newValue;
   }
 
-  find(item: T): T {
+  find(item: Partial<T>): T[] {
     if (!item) {
       throw new Error("Missing Data");
     }
@@ -139,7 +139,7 @@ notificationDatabase.create({
   nextDate: "Jan 2021",
   isCompleted: true,
   title: "Elec Berhapur",
-  eventid: 1
+  eventId: 1
 });
 
 userDatabase.create({ 
@@ -154,9 +154,9 @@ userDatabase.create({
   role: 'user' 
 });
 
-console.log(eventDatabase.getAll());
-console.log(notificationDatabase.getAll());
-console.log(userDatabase.getAll());
+// console.log(eventDatabase.getAll());
+// console.log(notificationDatabase.getAll());
+// console.log(userDatabase.getAll());
 
 export default {
   userDB: userDatabase,

@@ -15,15 +15,23 @@ const notificationRepo = new NotificationRepository();
 const notificationService = new NotificationService(notificationRepo);
 const notificationController = new NotificationController(notificationService);
 
+const withSuccess = (obj) => {
+  try {
+    return {
+      data: obj,
+      success: true
+    }
+  } catch (error) {
+    throw error;
+  }
+}
+
 const resolvers = {
   Query: {
     fetchEvents: async (parent, args, context) => {
         try {
           const expenses = await eventController.getAll(args);
-          return {
-            data: expenses.data,
-            success: true,
-          };
+          return withSuccess(expenses);
         } catch (error) {
           throw new Error(error);
         }
@@ -31,10 +39,7 @@ const resolvers = {
     fetchNotifications: async (parent, args, context) => {
       try {
         const notifications = await notificationController.getAll(args);
-        return {
-          data: notifications.data,
-          success: true,
-        };
+        return withSuccess(notifications);
       } catch (error) {
         throw new Error(error);
       }
@@ -42,15 +47,22 @@ const resolvers = {
     fetchUsers:  async (parent, args, context) => {
       try {
         const users = await userController.getAll(args);
-        return {
-          data: users.data,
-          success: true,
-        };
+        return withSuccess(users);
       } catch (error) {
         throw new Error(error);
       }
     },
-  }
+  },
+  Event: {
+    notifications: async (obj, args, context, info) => {
+      try {
+        const notifications = await notificationController.get({eventId: obj.id});
+        return notifications;
+      } catch (error) {
+        throw new Error(error);
+      }
+    }
+  },
 };
 
 export default resolvers;

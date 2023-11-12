@@ -6,12 +6,19 @@ export class NotificationController {
   async getAll(requestData: any) {
     try {
       const notifications = await this._notificationService.getAll();
-      return {
-        data: notifications,
-        success: true,
-      };
+      return notifications;
     } catch (error) {
       throw new Error(error);
     }
+  }
+
+  async get(requestData: any) {
+    try {
+      const notifications  = await this._notificationService.find(requestData);
+      return notifications;
+    } catch (error) {
+      throw new Error(error);
+    }
+    
   }
 }

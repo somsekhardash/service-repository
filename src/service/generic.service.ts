@@ -12,15 +12,19 @@ export class GenericService<T extends BaseRecord> {
       return await this.genericRepository.readOne(id);
     }
   
-    async create(user: T): Promise<void> {
-      await this.genericRepository.create(user);
+    async create(entity: T): Promise<void> {
+      await this.genericRepository.create(entity);
     }
   
-    async update(user: T): Promise<void> {
-      await this.genericRepository.update(user.id!, user);
+    async update(entity: T): Promise<void> {
+      await this.genericRepository.update(entity.id!, entity);
     }
   
     async delete(id: number): Promise<void> {
       await this.genericRepository.delete(id);
+    }
+
+    async find(entity: Partial<T>): Promise<T[]> {
+      return await this.genericRepository.find(entity);
     }
 }

@@ -6,10 +6,7 @@ export class EventController {
   async getAll(requestData: any) {
     try {
       const events = await this._eventService.getAll();
-      return {
-        data: events,
-        success: true,
-      };
+      return events;
     } catch (error) {
       throw new Error(error);
     }
