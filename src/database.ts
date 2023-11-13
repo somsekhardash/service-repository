@@ -1,35 +1,31 @@
 // @ts-nocheck
+import fs from 'fs';
 
-export interface BaseRecord {
+export interface IBaseDocument {
   id?: number;
+  createdAt?: any;
+  updatedAt?: any;
 }
 
-enum eventsType {
-  CUSTOM = "CUSTOM",
-  MONTH = "MONTH",
-  DAY = "DAY",
-  WEEK = "WEEK",
-  YEAR = "YEAR"
-}
-
-
-export interface IUser extends BaseRecord {
+export interface IUserDocument extends IBaseDocument {
   displayName: string;
   role: string;
   password: string;
+  mobileNumber: number;
+  username: string;
 }
 
-export interface IEvent extends BaseRecord{
-  userId: string;
+export interface IEventDocument extends IBaseDocument {
+  userId: number;
   name: string;
   description: string;
   type: string;
   startDate: string;
-  endDate: string;
+  endDate?: string;
   frequency: eventsType;
 }
 
-export interface INotification extends BaseRecord {
+export interface INotificationDocument extends IBaseDocument {
   amount: number;
   details: string;
   createdDate: string;
@@ -37,6 +33,14 @@ export interface INotification extends BaseRecord {
   isCompleted: boolean;
   title: string;
   eventId: string;
+}
+
+export enum eventsType {
+  CUSTOM = "CUSTOM",
+  MONTH = "MONTH",
+  DAY = "DAY",
+  WEEK = "WEEK",
+  YEAR = "YEAR"
 }
 
 export interface IDatabase<T> {
@@ -51,18 +55,36 @@ const compare = r => l => (typeof l === "object" ? contains(r)(l) : l === r);
 const contains = r => l =>
   Object.keys(r).every(k => l.hasOwnProperty(k) && compare(r[k])(l[k]));
 
-export class Database<T extends BaseRecord> implements IDatabase<T> {
+export class Database<T extends IBaseDocument> implements IDatabase<T> {
   private state: T[] = [];
+
+  private proxy = new Proxy(this.state, {
+    deleteProperty: function(target, property) {
+      delete target[property];
+      console.log("Deleted %s", property);
+      return true;
+    },
+    set: function(target, property, value, receiver) {      
+      target[property] = value;
+      console.log("Set %s to %o", property, value);
+      return true;
+    }
+  });
+
+  constructor(path: string) {
+    const data =  JSON.parse(fs.readFileSync(path, 'utf8'));
+    this.proxy = data;
+  }
 
   create(newValue: T): T {
     if (!newValue) {
       throw new Error("Missing Data");
     }
     const createdEntity= {
-      id: this.state.length + 1,
+      id: this.proxy.length + 1,
       ...newValue,
     };
-    this.state.push(createdEntity);
+    this.proxy.push(createdEntity);
     return createdEntity;
   }
 
@@ -70,8 +92,8 @@ export class Database<T extends BaseRecord> implements IDatabase<T> {
     if (!newValue) {
       throw new Error("Missing Data");
     }
-    var foundIndex = this.state.findIndex(x => x.id == id);
-    this.state[foundIndex] = newValue;
+    var foundIndex = this.proxy.findIndex(x => x.id == id);
+    this.proxy[foundIndex] = newValue;
     return newValue;
   }
 
@@ -79,7 +101,7 @@ export class Database<T extends BaseRecord> implements IDatabase<T> {
     if (!item) {
       throw new Error("Missing Data");
     }
-    var item = this.state.filter(contains(item));
+    var item = this.proxy.filter(contains(item));
     return item;
   }
 
@@ -87,30 +109,31 @@ export class Database<T extends BaseRecord> implements IDatabase<T> {
     if (!id) {
       throw new Error("Missing Data");
     }
-    return this.state.find((entity) => entity.id === id);
+    return this.proxy.find((entity) => entity.id === id);
   }
 
   getAll(): T[] {
-    return this.state;
+    return this.proxy;
   }
 
   delete(id: number): boolean {
     if (!id) {
       return false;
     }
-    this.state = this.state.filter((item) => item.id != id);
+    this.proxy = this.proxy.filter((item) => item.id != id);
     return true;
   }
 
   clear(): boolean {
-    this.state = [];
+    this.proxy = [];
     return true
   }
 }
 
-const userDatabase = new Database<IUser>();
-const eventDatabase = new Database<IEvent>();
-const notificationDatabase = new Database<INotification>();
+
+const userDatabase = new Database<IUserDocument>(`${__dirname}/data/users.json`);
+const eventDatabase = new Database<IEventDocument>(`${__dirname}/data/events.json`);
+const notificationDatabase = new Database<INotificationDocument>(`${__dirname}/data/notifications.json`);
 
 eventDatabase.create({
   userId: 1,
@@ -153,10 +176,6 @@ userDatabase.create({
   email: 'Just.Just@example.com', 
   role: 'user' 
 });
-
-// console.log(eventDatabase.getAll());
-// console.log(notificationDatabase.getAll());
-// console.log(userDatabase.getAll());
 
 export default {
   userDB: userDatabase,

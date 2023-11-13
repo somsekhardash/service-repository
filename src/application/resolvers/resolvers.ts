@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import { EventController, NotificationController, UserController } from "../../controller/controller";
 import { EventRepository, NotificationRepository, UserRepository } from "../../repository/repository";
 import { EventService, NotificationService, UserService } from "../../service/service";
@@ -30,8 +31,8 @@ const resolvers = {
   Query: {
     fetchEvents: async (parent, args, context) => {
         try {
-          const expenses = await eventController.getAll(args);
-          return withSuccess(expenses);
+          const events = _.isEmpty(args) ? await eventController.getAll() : await eventController.find(args);
+          return withSuccess(events);
         } catch (error) {
           throw new Error(error);
         }
@@ -44,13 +45,23 @@ const resolvers = {
         throw new Error(error);
       }
     },
-    fetchUsers:  async (parent, args, context) => {
+    fetchUsers: async (parent, args, context) => {
       try {
         const users = await userController.getAll(args);
         return withSuccess(users);
       } catch (error) {
         throw new Error(error);
       }
+    },
+  },
+  Mutation: {
+    createEvent: async (parent, args, context) => {
+     try {
+      const event = await eventController.create(args.input);
+      return withSuccess(event);
+     } catch (error) {
+      throw new Error(error);
+     }
     },
   },
   Event: {

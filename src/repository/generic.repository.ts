@@ -1,7 +1,7 @@
-import { BaseRecord, Database } from "../database";
+import { IBaseDocument, Database } from "../database";
 import { IRead, IWrite } from "./interfaces/type";
 
-export class GenericRepository<T extends BaseRecord>
+export class GenericRepository<T extends IBaseDocument>
   implements IWrite<T>, IRead<T>
 {
   constructor(readonly database: Database<T>) {}

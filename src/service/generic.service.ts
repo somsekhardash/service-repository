@@ -1,7 +1,7 @@
-import { BaseRecord } from "../database";
+import { IBaseDocument } from "../database";
 import { GenericRepository } from "../repository/repository";
 
-export class GenericService<T extends BaseRecord> {
+export class GenericService<T extends IBaseDocument> {
     constructor(private readonly genericRepository: GenericRepository<T>) {}
   
     async getAll(): Promise<T[]> {
@@ -12,8 +12,9 @@ export class GenericService<T extends BaseRecord> {
       return await this.genericRepository.readOne(id);
     }
   
-    async create(entity: T): Promise<void> {
-      await this.genericRepository.create(entity);
+    async create(entity: T): Promise<boolean> {
+      const created = await this.genericRepository.create(entity);
+      return created;
     }
   
     async update(entity: T): Promise<void> {

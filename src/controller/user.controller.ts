@@ -1,4 +1,4 @@
-import { IUser } from "../database";
+import { IUserDocument } from "../database";
 import { UserService } from "../service/service";
 
 export class UserController {
@@ -11,7 +11,7 @@ export class UserController {
   async getAll(requestData: any) {
     try {
       let users = await this._userService.getAll();
-      users = users.map((user: IUser) => ({
+      users = users.map((user: IUserDocument) => ({
         ...user,
         display: user.displayName,
       }));

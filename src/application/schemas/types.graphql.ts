@@ -28,6 +28,8 @@ export default gql`
     id: Int
     display: String
     role: String
+    mobile: Int
+    password: String
   }
 
   type Query {
@@ -65,13 +67,7 @@ export default gql`
   }
 
   type CreateEventOutput {
-    id: Int
-    title: String
-    type: String
-    amount: Int
-    startDate: String
-    endDate: String
-    frequency: String
+    success: Boolean
   }
 
   type CreateNotificationOutput {
@@ -107,11 +103,13 @@ export default gql`
   input CreateEventInput {
     id: Int
     title: String
+    description: String
     type: String
     amount: Int
     startDate: String
     endDate: String
     frequency: String
+    userId: Int
   }
 
   input CreateNotificationInput {
@@ -122,7 +120,7 @@ export default gql`
     nextDate: String
     isCompleted: Boolean
     title: String
-    eventid: Int
+    eventId: Int
   }
 
   input UpdateEventInput {
@@ -137,5 +135,5 @@ export default gql`
 
   input RefreshUserInput {
     token: String
-  }
+  } 
 `;

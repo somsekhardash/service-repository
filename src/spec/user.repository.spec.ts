@@ -1,4 +1,4 @@
-import { IUser } from "../database";
+import { IUserDocument } from "../database";
 import { UserRepository } from "../repository/user.repository";
 
 // export interface IWrite<T> {

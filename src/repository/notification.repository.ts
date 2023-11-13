@@ -1,7 +1,7 @@
 import { GenericRepository } from "./generic.repository";
-import database, { INotification } from "../database";
+import database, { INotificationDocument } from "../database";
 
-export class NotificationRepository extends GenericRepository<INotification> {
+export class NotificationRepository extends GenericRepository<INotificationDocument> {
   constructor() {
     super(database.notificationDB);
   }
