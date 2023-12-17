@@ -1,54 +1,68 @@
-import { IBaseDocument, Database } from "../database";
-import { IRead, IWrite } from "./interfaces/type";
+import { Prisma, PrismaClient } from "@prisma/client";
 
-export class GenericRepository<T extends IBaseDocument>
-  implements IWrite<T>, IRead<T>
-{
-  constructor(readonly database: Database<T>) {}
+export type ModelType = keyof PrismaClient;
 
-  async read(item: T): Promise<T[]> {
-    try {
-      return (await this.database.find(item)) as unknown as T[];
-    } catch (error) {
-      throw new Error("Method not implemented.");
-    }
+export interface IRepository<T> {
+  readOne(id: number): Promise<T | null>;
+  readAll(): Promise<T[]>;
+  create(data: any): Promise<T>;
+  update(id: number, data: any): Promise<T>;
+  delete(id: number): Promise<T>;
+  find(data: Partial<T>): Promise<T[]>;
+}
+
+export class GenericRepository<T> implements IRepository<T> {
+  private model: any;
+  constructor(modalName: Prisma.ModelName) {
+    const client = new PrismaClient();
+    this.model = client[modalName];
   }
 
-  async create(entity: T): Promise<boolean> {
+  async create(data: T): Promise<T> {
     try {
-      await this.database.create(entity);
-      return true;
-    } catch (error) {
-      return false;
-    }
-  }
-
-  async readOne(id: number): Promise<T> {
-    try {
-      return (await this.database.get(id)) as T;
+      return await this.model.create({ data });
     } catch (error) {
       throw error;
     }
   }
 
-  async update(id: number, entity: T): Promise<boolean> {
+  async readOne(id: number): Promise<T> {
     try {
-      await this.database.update(id, entity);
-      return true;
+      return await this.model.findUnique({ where: { id } });
     } catch (error) {
-      return false;
+      throw error;
     }
   }
 
-  async delete(id: number): Promise<boolean> {
-    return await this.database.delete(id);
+  async update(id: number, entity: T): Promise<T> {
+    try {
+      return await this.model.update({ where: { id }, entity });
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async delete(id: number): Promise<T> {
+    try {
+      return await this.model.delete({ where: { id } });
+    } catch (error) {
+      throw error;
+    }
   }
 
   async readAll(): Promise<T[]> {
-    return await this.database.getAll();
+    try {
+      return await this.model.findMany();
+    } catch (error) {
+      throw error;
+    }
   }
 
-  async find(entity: Partial<T>): Promise<T[]> {
-    return await this.database.find(entity);
+  async find(data: Partial<T>): Promise<T[]> {
+    try {
+      return await this.model.findMany();
+    } catch (error) {
+      throw error;
+    }
   }
 }

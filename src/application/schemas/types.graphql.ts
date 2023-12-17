@@ -25,7 +25,7 @@ export default gql`
   }
 
   type User {
-    id: Int
+    id: String
     display: String
     role: String
     mobile: Int
@@ -129,8 +129,9 @@ export default gql`
   }
 
   input RegisterUserInput {
-    mobile: Int
-    passWord: String
+    mobile: Int!
+    passWord: String!
+    userName: String!
   }
 
   input RefreshUserInput {

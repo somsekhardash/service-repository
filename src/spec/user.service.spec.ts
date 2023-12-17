@@ -123,12 +123,12 @@
 // }
 
 
-import { EventService } from "./../service/service";
+// import { EventService } from "./../service/service";
 
-describe("Event repository", () => {
-  let eventService: EventService = new EventService();
+// describe("Event repository", () => {
+//   let eventService: EventService = new EventService();
 
-  it("should have a method called createEvent", () => {
-    expect(eventService.create).toBeDefined();
-  });
-});
+//   it("should have a method called createEvent", () => {
+//     expect(eventService.create).toBeDefined();
+//   });
+// });

@@ -1,8 +1,8 @@
 import { GenericRepository } from "./generic.repository";
-import database, { IEventDocument } from "../database";
+import {  Event } from '@prisma/client';
 
-export class EventRepository extends GenericRepository<IEventDocument> {
+export class EventRepository extends GenericRepository<Event> {
   constructor() {
-    super(database.eventDB);
+    super('Event');
   }
 }

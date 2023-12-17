@@ -29,13 +29,7 @@ export type CreateEventInput = {
 
 export type CreateEventOutput = {
   __typename?: 'CreateEventOutput';
-  amount?: Maybe<Scalars['Int']['output']>;
-  endDate?: Maybe<Scalars['String']['output']>;
-  frequency?: Maybe<Scalars['String']['output']>;
-  id?: Maybe<Scalars['Int']['output']>;
-  startDate?: Maybe<Scalars['String']['output']>;
-  title?: Maybe<Scalars['String']['output']>;
-  type?: Maybe<Scalars['String']['output']>;
+  success?: Maybe<Scalars['Boolean']['output']>;
 };
 
 export type CreateNotificationInput = {
@@ -330,13 +324,7 @@ export type ResolversParentTypes = ResolversObject<{
 }>;
 
 export type CreateEventOutputResolvers<ContextType = any, ParentType extends ResolversParentTypes['CreateEventOutput'] = ResolversParentTypes['CreateEventOutput']> = ResolversObject<{
-  amount?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
-  endDate?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  frequency?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  id?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
-  startDate?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  title?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  type?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  success?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 

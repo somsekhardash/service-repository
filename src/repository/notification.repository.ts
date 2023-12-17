@@ -3,6 +3,6 @@ import database, { INotificationDocument } from "../database";
 
 export class NotificationRepository extends GenericRepository<INotificationDocument> {
   constructor() {
-    super(database.notificationDB);
+    super('Notification');
   }
 }

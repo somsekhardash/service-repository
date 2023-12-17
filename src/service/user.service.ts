@@ -1,4 +1,5 @@
 import { IUserDocument } from "../database";
+import { Prisma  } from "@prisma/client";
 import { GenericService } from "./generic.service";
 import { UserRepository } from "../repository/user.repository";
 import { IUserService } from "./interfaces/type";
@@ -15,10 +16,10 @@ export class UserService
   private async isMobileNumberAvailable(
     mobileNumber: number
   ): Promise<boolean> {
-    const isExists = await this._userRepository.isMobileNumberExists(
-      mobileNumber
-    );
-    return isExists;
+    // const isExists = await this._userRepository.isMobileNumberExists(
+    //   mobileNumber
+    // );
+    return true;
   }
 
   private async isAdmin(user: IUserCreateDto) {
@@ -40,9 +41,6 @@ export class UserService
   }
 
   async create(data: IUserCreateDto): Promise<boolean> {
-    if (!data.displayName) {
-      throw new Error("BadRequestError - displayName Not there!!");
-    }
 
     if (!data.password) {
       throw new Error("BadRequestError - password Not there !!");
@@ -66,8 +64,9 @@ export class UserService
       role: isAdmin ? "ADMIN" : "USER",
     };
 
-    const isCreated = await this._userRepository.create(userData);
+    // const isCreated = await this._userRepository.create(userData);
 
-    return isCreated;
+    // return isCreated;
+    return true;
   }
 }

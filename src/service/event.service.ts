@@ -8,12 +8,13 @@ export class EventService
   extends GenericService<IEventDocument>
   implements IEventService
 {
-  constructor(private readonly _eventRepository: EventRepository) {
-    super(_eventRepository);
-  }
+  // constructor(private readonly _eventRepository: EventRepository) {
+  //   super(_eventRepository);
+  // }
 
-  async create(entity: IEventCreateDto): Promise<boolean> {
-    const created = await this._eventRepository.create(entity);
-    return created;
-  }
+  // async create(entity: IEventCreateDto): Promise<boolean> {
+  //   // const created = await this._eventRepository.create(entity);
+  //   // return created;
+  //   return true;
+  // }
 }

@@ -1,5 +1,9 @@
 import { application } from "./application/server";
 
 (async() => {
-  await application.init();
+  try {
+    await application.init();  
+  } catch (error) {
+    console.error(error);
+  }
 })();

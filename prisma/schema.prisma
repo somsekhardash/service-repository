@@ -1,0 +1,59 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = "mongodb+srv://sdash:Value*123@somcluster.1cyvrwm.mongodb.net/test?retryWrites=true&w=majority"
+}
+
+model Event {
+  id           String         @id @default(auto()) @map("_id") @db.ObjectId
+  slug         String         @unique
+  name         String
+  description  String
+  type         String
+  startDate    String
+  endDate      String
+  frequency    EventsType
+  user         User           @relation(fields: [userId], references: [id])
+  userId       String         @db.ObjectId
+  notification Notification[]
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+}
+
+model User {
+  id           String   @id @default(auto()) @map("_id") @db.ObjectId
+  mobileNumber Int      @unique
+  userName     String
+  passWord     String
+  role         String?
+  events       Event[]
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model Notification {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  amount      Int
+  details     String
+  nextDate    DateTime
+  isCompleted Boolean
+  title       String
+  eventId     String   @db.ObjectId
+  event       Event    @relation(fields: [eventId], references: [id])
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+enum EventsType {
+  CUSTOM
+  MONTH
+  DAY
+  WEEK
+  YEAR
+}
