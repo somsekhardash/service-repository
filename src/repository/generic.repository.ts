@@ -18,7 +18,7 @@ export class GenericRepository<T> implements IRepository<T> {
     this.model = client[modalName];
   }
 
-  async create(data: T): Promise<T> {
+  async create(data: Partial<T>): Promise<T> {
     try {
       return await this.model.create({ data });
     } catch (error) {

@@ -1,7 +1,7 @@
 export interface IUserCreateDto {
     password: string;
     username: string;
-    mobileNumber: number;
+    mobile: number;
     role?: string;
 }
 

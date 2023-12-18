@@ -3,13 +3,16 @@ import { EventController, NotificationController, UserController } from "../../c
 import { EventRepository, GenericRepository, NotificationRepository, UserRepository } from "../../repository/repository";
 import { EventService, NotificationService, UserService } from "../../service/service";
 import { PrismaClient, User } from "@prisma/client";
+import { GenericService } from '../../service/generic.service';
+import { IUserCreateDto } from '../../service/interfaces/user.dto';
 
 // const userRepo = new UserRepository();
 // const userService = new UserService(userRepo);
 // const userController = new UserController(userService);
+// const userRepository = new GenericRepository('User'); 
 
-
-const userRepository = new GenericRepository('User'); 
+const userRepository = new UserRepository();
+const userService = new UserService(userRepository);
 
 // const eventRepo = new EventRepository();
 // const eventService = new EventService(eventRepo);
@@ -51,8 +54,8 @@ const resolvers = {
     fetchUsers: async (parent, args, context) => {
       try {
         // const users = await userController.getAll(args);
-        const users: any[] = await userRepository.readAll();
-        console.log(users);
+        // const users: any[] = await userRepository.readAll();
+        const users: User[] = await userService.getAll();
         const check = users.map(user => ({
           id: user.id,
           display: user.userName,
@@ -77,12 +80,12 @@ const resolvers = {
     // },
     registerUser: async (parent, args, context) => {
       try {
-        const userInput:Partial<User> = {
-          mobileNumber: args.input.mobile,
-          userName: args.input.userName,
-          passWord:  args.input.passWord,
+        const userInput: IUserCreateDto = {
+          mobile: args.input.mobile,
+          username: args.input.userName,
+          password:  args.input.passWord,
         }
-        const user = await userRepository.create(userInput);
+        const user = await userService.create(userInput);
         return withSuccess(user);
       } catch (error) {
         throw new Error(error);

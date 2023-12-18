@@ -16,10 +16,8 @@ export class GenericService<T> {
       return await this.genericRepository.readOne(id);
     }
   
-    async create(entity: T): Promise<boolean> {
-      // const created = await this.genericRepository.create(entity);
-      // return created;
-      return true;
+    async create(entity: Partial<T>): Promise<T> {
+      return await this.genericRepository.create(entity);
     }
   
     async update(entity: T): Promise<void> {

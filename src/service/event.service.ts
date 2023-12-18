@@ -3,15 +3,11 @@ import { GenericService } from "./generic.service";
 import { EventRepository } from "../repository/repository";
 import { IEventService } from "./interfaces/type";
 import { IEventCreateDto } from "./interfaces/event.dto";
-
-export class EventService
-  extends GenericService<IEventDocument>
-  implements IEventService
-{
+// implements IEventService
+export class EventService extends GenericService<IEventDocument> {
   // constructor(private readonly _eventRepository: EventRepository) {
   //   super(_eventRepository);
   // }
-
   // async create(entity: IEventCreateDto): Promise<boolean> {
   //   // const created = await this._eventRepository.create(entity);
   //   // return created;

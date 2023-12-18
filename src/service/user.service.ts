@@ -4,11 +4,10 @@ import { GenericService } from "./generic.service";
 import { UserRepository } from "../repository/user.repository";
 import { IUserService } from "./interfaces/type";
 import { IUserCreateDto } from "./interfaces/user.dto";
+import {  User } from '@prisma/client';
 
-export class UserService
-  extends GenericService<IUserDocument>
-  implements IUserService
-{
+// implements IUserService
+export class UserService extends GenericService<User> {
   constructor(private readonly _userRepository: UserRepository) {
     super(_userRepository);
   }
@@ -23,8 +22,7 @@ export class UserService
   }
 
   private async isAdmin(user: IUserCreateDto) {
-    const mobileNumber = user.mobileNumber;
-    if (mobileNumber == 7032300186) {
+    if (user.mobile == 619) {
       return true;
     }
     return false;
@@ -40,7 +38,7 @@ export class UserService
     return isAvailable;
   }
 
-  async create(data: IUserCreateDto): Promise<boolean> {
+  async create(data: IUserCreateDto): Promise<User> {
 
     if (!data.password) {
       throw new Error("BadRequestError - password Not there !!");
@@ -50,23 +48,24 @@ export class UserService
       throw new Error("BadRequestError - username Not there !!");
     }
 
-    if (!data.mobileNumber) {
+    if (!data.mobile) {
       throw new Error("BadRequestError - mobileNumber Not there !!");
     }
 
-    if (this.isValidMobileNumber(data.mobileNumber)) {
-      throw new Error("BadRequestError - Invalid mobile Number !!");
-    }
+    // if (this.isValidMobileNumber(data.mobileNumber)) {
+    //   throw new Error("BadRequestError - Invalid mobile Number !!");
+    // }
+    
     const isAdmin = this.isAdmin(data);
 
-    const userData: IUserDocument = {
-      ...data,
+    const userData: Partial<User> = {
+      userName: data.username,
+      passWord: data.password,
+      mobileNumber: data.mobile,
       role: isAdmin ? "ADMIN" : "USER",
     };
 
-    // const isCreated = await this._userRepository.create(userData);
-
-    // return isCreated;
-    return true;
+    const newUser = await this._userRepository.create(userData);
+    return newUser;
   }
 }
