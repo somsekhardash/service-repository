@@ -34,9 +34,9 @@ export class GenericRepository<T> implements IRepository<T> {
     }
   }
 
-  async update(id: number, entity: T): Promise<T> {
+  async update(id: number|string, entity: Partial<T>): Promise<T> {
     try {
-      return await this.model.update({ where: { id }, entity });
+      return await this.model.update({ where: { id }, data: entity });
     } catch (error) {
       throw error;
     }
@@ -60,7 +60,7 @@ export class GenericRepository<T> implements IRepository<T> {
 
   async find(data: Partial<T>): Promise<T[]> {
     try {
-      return await this.model.findMany();
+      return await this.model.findMany({ where: data });
     } catch (error) {
       throw error;
     }

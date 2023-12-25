@@ -1,10 +1,11 @@
-import { IEventDocument } from "../database";
+// import { IEventDocument } from "../database";
 import { GenericService } from "./generic.service";
 import { EventRepository } from "../repository/repository";
 import { IEventService } from "./interfaces/type";
 import { IEventCreateDto } from "./interfaces/event.dto";
+import { Event } from "@prisma/client";
 // implements IEventService
-export class EventService extends GenericService<IEventDocument> {
+export class EventService extends GenericService<Event> {
   // constructor(private readonly _eventRepository: EventRepository) {
   //   super(_eventRepository);
   // }

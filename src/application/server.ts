@@ -10,11 +10,11 @@ import { Strategy as GoogleStrategy } from "passport-google-oauth20";
 import cookieSession  from "cookie-session";
 
 import authRoute from "./api/auth";
-import {notFound, errorHandler } from "./middlewares/errorHandler";
+import {notFound, errorHandler, verifyHeaderToken } from "./middlewares/errorHandler";
 
-function isLoggedIn(req, res, next) {
-  req.user ? next() : res.sendStatus(401);
-}
+// function isLoggedIn(req, res, next) {
+//   req.user ? next() : res.sendStatus(401);
+// }
 
 const successLoginUrl = "http://localhost:3000/";
 const failLoginUrl = "http://localhost:3000/login/error";
@@ -54,13 +54,19 @@ class Application {
       passport.deserializeUser(function(user, done) {
         done(null, user);
       }); 
+      
       this.app.use(cookieSession({
         name: 'dashmman',
         keys: ["dashman"],
         maxAge: 24 * 60 * 60 * 1000
       }));
 
-      this.app.use(cors());
+      this.app.use(cors({
+        origin: ["http://localhost:3000"],
+        methods: ["GET", "POST"],
+        credentials: true
+      }));
+      
       this.app.use(express.json());
       this.app.use(passport.initialize());
       this.app.use(passport.session());
@@ -81,13 +87,7 @@ class Application {
         }
       );
 
-      this.app.use("/api/v1/", authRoute);
-
-      this.app.use("/", isLoggedIn, (req, res) => {
-        res.json({
-          message: "🦄🌈✨👋🌎🌍🌏✨🌈🦄",
-        });
-      });
+      this.app.use("/api/v1/auth", authRoute);
 
       this.app.use("/login", (req, res) => {
         res.send("Somsething went wrong");
@@ -96,10 +96,23 @@ class Application {
       await server.start();
       this.app.use(
         "/graphql",
-        cors<cors.CorsRequest>(),
+        cors<cors.CorsRequest>({
+          origin: ["http://localhost:3000"],
+          methods: ["GET", "POST"],
+          credentials: true
+        }),
         express.json(),
-        expressMiddleware(server)
+        expressMiddleware(server, {
+          // @ts-ignore
+          context: verifyHeaderToken
+        })
       );
+
+      this.app.use("/", (req, res) => {
+        res.json({
+          message: "🦄🌈✨👋🌎🌍🌏✨🌈🦄",
+        });
+      });
 
       this.app.use(notFound);
       this.app.use(errorHandler);

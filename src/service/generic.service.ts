@@ -9,7 +9,8 @@ export class GenericService<T> {
     }
   
     async getAll(): Promise<T[]> {
-      return await this.genericRepository.readAll();
+      const check =  await this.genericRepository.readAll();
+      return check;
     }
   
     async getById(id: number): Promise<T | undefined> {

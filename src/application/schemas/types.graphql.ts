@@ -1,40 +1,41 @@
 import gql from "graphql-tag";
 
+
 export default gql`
   type Event {
-    id: Int
+    id: String
     name: String
-    type: String
     description: String
+    type: String
     startDate: String
     endDate: String
     frequency: String
     default: Int
+    isCompleted: Boolean
+    tag: [String]
     notifications: [Notification]
   }
 
   type Notification {
-    id: Int
+    id: String
     amount: Int
     details: String
     paidDate: String
     nextDate: String
     isCompleted: Boolean
     title: String
+    tag: [String]
     eventid: ID
   }
 
   type User {
-    id: String
     display: String
-    role: String
     mobile: Int
-    password: String
   }
 
   type Query {
     fetchEvents(
-      id: Int
+      id: String
       type: String
       month: String
       year: String
@@ -44,11 +45,12 @@ export default gql`
     ): FetchEventsOutput
 
     fetchNotifications(
-      id: Int
+      id: String
       month: String
       year: String
     ): FetchNotificationsOutput
 
+    getLoggedUser: User
     fetchUsers(id: Int, mobile: Int): FetchUsersOutput
   }
 
@@ -56,9 +58,6 @@ export default gql`
     createEvent(input: CreateEventInput): CreateEventOutput
     createNotification(input: CreateNotificationInput): CreateNotificationOutput
     updateEvent(input: UpdateEventInput): CreateEventOutput
-    registerUser(input: RegisterUserInput): RegisterUserOutput
-    loginUser(input: RegisterUserInput): LoginUserOutput
-    refreshUser(tokenInput: RefreshUserInput): LoginUserOutput
   }
 
   type FetchEventsOutput {
@@ -71,7 +70,7 @@ export default gql`
   }
 
   type CreateNotificationOutput {
-    id: Int
+    id: String
     amount: Int
     details: String
     createdDate: String
@@ -101,19 +100,20 @@ export default gql`
   }
 
   input CreateEventInput {
-    id: Int
-    title: String
+    id: String
+    name: String
     description: String
     type: String
-    amount: Int
     startDate: String
     endDate: String
     frequency: String
-    userId: Int
+    default: Int
+    isCompleted: Boolean
+    tag: [String]
   }
 
   input CreateNotificationInput {
-    id: Int
+    id: String
     amount: Int
     details: String
     createdDate: String
