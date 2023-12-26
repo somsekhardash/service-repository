@@ -67,8 +67,8 @@ export interface INotificationDocument extends IBaseDocument {
 
 export enum eventsType {
   CUSTOM = "CUSTOM",
-  MONTH = "MONTH",
-  DAY = "DAY",
-  WEEK = "WEEK",
-  YEAR = "YEAR"
+  MONTH = "MONTHLY",
+  DAY = "DAYLY",
+  WEEK = "WEEKLY",
+  YEAR = "YEARLY"
 }
