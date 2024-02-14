@@ -12,9 +12,27 @@ export interface IRepository<T> {
 }
 
 export class GenericRepository<T> implements IRepository<T> {
-  private model: any;
+  protected model: any;
   constructor(modalName: Prisma.ModelName) {
-    const client = new PrismaClient();
+    // const client = new PrismaClient();
+    const client = new PrismaClient().$extends({
+      result: {
+        notification: {
+          paidDateMonth: {
+            needs: { paidDate: true },
+            compute(notification) {
+              return notification ? notification.paidDate.getMonth() + 1 : null
+            },
+          },
+          paidDateYear: {
+            needs: { paidDate: true },
+            compute(notification) {
+              return notification ? notification.paidDate.getFullYear() : null
+            },
+          }
+        },
+      },
+    });
     this.model = client[modalName];
   }
 

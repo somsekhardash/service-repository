@@ -2,7 +2,19 @@ import { PrismaClient } from "@prisma/client";
 
 export class Database {
   private static _instance: Database = new Database();
-  private client = new PrismaClient();
+  private client = new PrismaClient().$extends({
+    result: {
+      notification: {
+        paidDateMonth: {
+          needs: { paidDate: true },
+          compute(notification) {
+            const d = new Date(String(notification));
+            return notification ? d.getMonth() : null
+          },
+        },
+      },
+    },
+  });
 
   constructor() {
     if (Database._instance) {

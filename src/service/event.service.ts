@@ -19,4 +19,8 @@ export class EventService extends GenericService<Event> {
   //   const created = await this._eventRepository.readAll();
   //   return created;
   // }
+
+  // async find(entity: Partial<Event>): Promise<Event[]> {
+  //   return await this._eventRepository.find(entity);
+  // }
 }

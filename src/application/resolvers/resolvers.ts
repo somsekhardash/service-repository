@@ -32,8 +32,8 @@ const userService = new UserService(userRepository);
 const eventRepository = new EventRepository();
 const eventService = new EventService(eventRepository);
 
-// const notificationRepo = new NotificationRepository();
-// const notificationService = new NotificationService(notificationRepo);
+const notificationRepo = new NotificationRepository();
+const notificationService = new NotificationService(notificationRepo);
 // const notificationController = new NotificationController(notificationService);
 
 const withSuccess = (obj) => {
@@ -54,21 +54,31 @@ const resolvers = {
           let events = null;
           if(_.isEmpty(args))
             events = await eventService.getAll();
-          else
+          else{
+            if(args.title) {
+              args.name = args.title;
+              delete args.title;
+            }
             events = await eventService.find(args);
+          }
           return withSuccess(events);
         } catch (error) {
           throw new Error(error);
         }
     },
-    // fetchNotifications: async (parent, args, context) => {
-    //   try {
-    //     const notifications = await notificationController.getAll(args);
-    //     return withSuccess(notifications);
-    //   } catch (error) {
-    //     throw new Error(error);
-    //   }
-    // },
+    fetchNotifications: async (parent, args, context) => {
+      try {
+        let notifications = null;
+        if(_.isEmpty(args)) {
+          notifications = await notificationService.getAll();
+        } else {
+          notifications = await notificationService.find(args);
+        }
+        return withSuccess(notifications);
+      } catch (error) {
+        throw new Error(error);
+      }
+    },
     fetchUsers: async (parent, args, context) => {
       try {
         // const users = await userController.getAll(args);
