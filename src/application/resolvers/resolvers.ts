@@ -49,6 +49,20 @@ const withSuccess = (obj) => {
 
 const resolvers = {
   Query: {
+    doMigration: async (parent, args, context) => {
+      try {
+        const events = await eventService.getAll();
+        events.forEach(async (event) => {
+          const notifications = await notificationService.find({ eventId: event.id });
+          const latestNoteNextDate = notifications[notifications.length - 1]?.nextDate || null;
+          const updatedEvent =  await eventService.update( event.id as any, { nextDate: latestNoteNextDate});
+          console.log(updatedEvent);
+        });
+        return true;
+      } catch (error) {
+        throw error;
+      }
+    },  
     fetchEvents: async (parent, args, context) => {
         try {
           let events = null;
@@ -166,14 +180,14 @@ const resolvers = {
     },
   },
   Event: {
-    // notifications: async (obj, args, context, info) => {
-    //   try {
-    //     const notifications = await notificationController.get({eventId: obj.id});
-    //     return notifications;
-    //   } catch (error) {
-    //     throw new Error(error);
-    //   }
-    // }
+    notifications: async (obj, args, context, info) => {
+      try {
+        const notifications = await notificationService.find({ eventId: obj.id })
+        return notifications;
+      } catch (error) {
+        throw new Error(error);
+      }
+    }
   },
 };
 

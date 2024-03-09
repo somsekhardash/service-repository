@@ -14,6 +14,7 @@ export default gql`
     isCompleted: Boolean
     tag: [String]
     notifications: [Notification]
+    nextDate: String
   }
 
   type Notification {
@@ -34,6 +35,7 @@ export default gql`
   }
 
   type Query {
+    doMigration(id: String): Boolean
     fetchEvents(
       id: String
       type: String
@@ -48,6 +50,7 @@ export default gql`
       id: String
       month: String
       year: String
+      eventId: String
     ): FetchNotificationsOutput
 
     getLoggedUser: User

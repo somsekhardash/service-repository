@@ -56,6 +56,7 @@ export class GenericRepository<T> implements IRepository<T> {
     try {
       return await this.model.update({ where: { id }, data: entity });
     } catch (error) {
+      console.log(error);
       throw error;
     }
   }
