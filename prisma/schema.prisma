@@ -17,6 +17,7 @@ model Event {
   type         EventType
   startDate    DateTime?
   endDate      DateTime?     
+  nextDate     DateTime?     
   isCompleted  Boolean
   tag          String[]
   default      Int? 

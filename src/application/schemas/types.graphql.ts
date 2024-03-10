@@ -26,7 +26,7 @@ export default gql`
     isCompleted: Boolean
     title: String
     tag: [String]
-    eventid: ID
+    eventId: ID
   }
 
   type User {
@@ -80,7 +80,7 @@ export default gql`
     nextDate: String
     isCompleted: Boolean
     title: String
-    eventid: ID
+    eventId: ID
   }
 
   type FetchNotificationsOutput {

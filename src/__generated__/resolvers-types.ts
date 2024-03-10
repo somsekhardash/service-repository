@@ -16,15 +16,16 @@ export type Scalars = {
 };
 
 export type CreateEventInput = {
-  amount?: InputMaybe<Scalars['Int']['input']>;
+  default?: InputMaybe<Scalars['Int']['input']>;
   description?: InputMaybe<Scalars['String']['input']>;
   endDate?: InputMaybe<Scalars['String']['input']>;
   frequency?: InputMaybe<Scalars['String']['input']>;
-  id?: InputMaybe<Scalars['Int']['input']>;
+  id?: InputMaybe<Scalars['String']['input']>;
+  isCompleted?: InputMaybe<Scalars['Boolean']['input']>;
+  name?: InputMaybe<Scalars['String']['input']>;
   startDate?: InputMaybe<Scalars['String']['input']>;
-  title?: InputMaybe<Scalars['String']['input']>;
+  tag?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
   type?: InputMaybe<Scalars['String']['input']>;
-  userId?: InputMaybe<Scalars['Int']['input']>;
 };
 
 export type CreateEventOutput = {
@@ -37,7 +38,7 @@ export type CreateNotificationInput = {
   createdDate?: InputMaybe<Scalars['String']['input']>;
   details?: InputMaybe<Scalars['String']['input']>;
   eventId?: InputMaybe<Scalars['Int']['input']>;
-  id?: InputMaybe<Scalars['Int']['input']>;
+  id?: InputMaybe<Scalars['String']['input']>;
   isCompleted?: InputMaybe<Scalars['Boolean']['input']>;
   nextDate?: InputMaybe<Scalars['String']['input']>;
   title?: InputMaybe<Scalars['String']['input']>;
@@ -48,8 +49,8 @@ export type CreateNotificationOutput = {
   amount?: Maybe<Scalars['Int']['output']>;
   createdDate?: Maybe<Scalars['String']['output']>;
   details?: Maybe<Scalars['String']['output']>;
-  eventid?: Maybe<Scalars['ID']['output']>;
-  id?: Maybe<Scalars['Int']['output']>;
+  eventId?: Maybe<Scalars['ID']['output']>;
+  id?: Maybe<Scalars['String']['output']>;
   isCompleted?: Maybe<Scalars['Boolean']['output']>;
   nextDate?: Maybe<Scalars['String']['output']>;
   title?: Maybe<Scalars['String']['output']>;
@@ -61,10 +62,13 @@ export type Event = {
   description?: Maybe<Scalars['String']['output']>;
   endDate?: Maybe<Scalars['String']['output']>;
   frequency?: Maybe<Scalars['String']['output']>;
-  id?: Maybe<Scalars['Int']['output']>;
+  id?: Maybe<Scalars['String']['output']>;
+  isCompleted?: Maybe<Scalars['Boolean']['output']>;
   name?: Maybe<Scalars['String']['output']>;
+  nextDate?: Maybe<Scalars['String']['output']>;
   notifications?: Maybe<Array<Maybe<Notification>>>;
   startDate?: Maybe<Scalars['String']['output']>;
+  tag?: Maybe<Array<Maybe<Scalars['String']['output']>>>;
   type?: Maybe<Scalars['String']['output']>;
 };
 
@@ -96,9 +100,6 @@ export type Mutation = {
   __typename?: 'Mutation';
   createEvent?: Maybe<CreateEventOutput>;
   createNotification?: Maybe<CreateNotificationOutput>;
-  loginUser?: Maybe<LoginUserOutput>;
-  refreshUser?: Maybe<LoginUserOutput>;
-  registerUser?: Maybe<RegisterUserOutput>;
   updateEvent?: Maybe<CreateEventOutput>;
 };
 
@@ -113,21 +114,6 @@ export type MutationCreateNotificationArgs = {
 };
 
 
-export type MutationLoginUserArgs = {
-  input?: InputMaybe<RegisterUserInput>;
-};
-
-
-export type MutationRefreshUserArgs = {
-  tokenInput?: InputMaybe<RefreshUserInput>;
-};
-
-
-export type MutationRegisterUserArgs = {
-  input?: InputMaybe<RegisterUserInput>;
-};
-
-
 export type MutationUpdateEventArgs = {
   input?: InputMaybe<UpdateEventInput>;
 };
@@ -136,25 +122,33 @@ export type Notification = {
   __typename?: 'Notification';
   amount?: Maybe<Scalars['Int']['output']>;
   details?: Maybe<Scalars['String']['output']>;
-  eventid?: Maybe<Scalars['ID']['output']>;
-  id?: Maybe<Scalars['Int']['output']>;
+  eventId?: Maybe<Scalars['ID']['output']>;
+  id?: Maybe<Scalars['String']['output']>;
   isCompleted?: Maybe<Scalars['Boolean']['output']>;
   nextDate?: Maybe<Scalars['String']['output']>;
   paidDate?: Maybe<Scalars['String']['output']>;
+  tag?: Maybe<Array<Maybe<Scalars['String']['output']>>>;
   title?: Maybe<Scalars['String']['output']>;
 };
 
 export type Query = {
   __typename?: 'Query';
+  doMigration?: Maybe<Scalars['Boolean']['output']>;
   fetchEvents?: Maybe<FetchEventsOutput>;
   fetchNotifications?: Maybe<FetchNotificationsOutput>;
   fetchUsers?: Maybe<FetchUsersOutput>;
+  getLoggedUser?: Maybe<User>;
+};
+
+
+export type QueryDoMigrationArgs = {
+  id?: InputMaybe<Scalars['String']['input']>;
 };
 
 
 export type QueryFetchEventsArgs = {
   frequency?: InputMaybe<Scalars['String']['input']>;
-  id?: InputMaybe<Scalars['Int']['input']>;
+  id?: InputMaybe<Scalars['String']['input']>;
   month?: InputMaybe<Scalars['String']['input']>;
   startDate?: InputMaybe<Scalars['String']['input']>;
   title?: InputMaybe<Scalars['String']['input']>;
@@ -164,7 +158,8 @@ export type QueryFetchEventsArgs = {
 
 
 export type QueryFetchNotificationsArgs = {
-  id?: InputMaybe<Scalars['Int']['input']>;
+  eventId?: InputMaybe<Scalars['String']['input']>;
+  id?: InputMaybe<Scalars['String']['input']>;
   month?: InputMaybe<Scalars['String']['input']>;
   year?: InputMaybe<Scalars['String']['input']>;
 };
@@ -180,8 +175,9 @@ export type RefreshUserInput = {
 };
 
 export type RegisterUserInput = {
-  mobile?: InputMaybe<Scalars['Int']['input']>;
-  passWord?: InputMaybe<Scalars['String']['input']>;
+  mobile: Scalars['Int']['input'];
+  passWord: Scalars['String']['input'];
+  userName: Scalars['String']['input'];
 };
 
 export type RegisterUserOutput = {
@@ -197,10 +193,7 @@ export type UpdateEventInput = {
 export type User = {
   __typename?: 'User';
   display?: Maybe<Scalars['String']['output']>;
-  id?: Maybe<Scalars['Int']['output']>;
   mobile?: Maybe<Scalars['Int']['output']>;
-  password?: Maybe<Scalars['String']['output']>;
-  role?: Maybe<Scalars['String']['output']>;
 };
 
 export type WithIndex<TObject> = TObject & Record<string, any>;
@@ -332,8 +325,8 @@ export type CreateNotificationOutputResolvers<ContextType = any, ParentType exte
   amount?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   createdDate?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   details?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  eventid?: Resolver<Maybe<ResolversTypes['ID']>, ParentType, ContextType>;
-  id?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  eventId?: Resolver<Maybe<ResolversTypes['ID']>, ParentType, ContextType>;
+  id?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   isCompleted?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
   nextDate?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   title?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
@@ -345,10 +338,13 @@ export type EventResolvers<ContextType = any, ParentType extends ResolversParent
   description?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   endDate?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   frequency?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  id?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  id?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  isCompleted?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
   name?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  nextDate?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   notifications?: Resolver<Maybe<Array<Maybe<ResolversTypes['Notification']>>>, ParentType, ContextType>;
   startDate?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  tag?: Resolver<Maybe<Array<Maybe<ResolversTypes['String']>>>, ParentType, ContextType>;
   type?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
@@ -380,28 +376,28 @@ export type LoginUserOutputResolvers<ContextType = any, ParentType extends Resol
 export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = ResolversObject<{
   createEvent?: Resolver<Maybe<ResolversTypes['CreateEventOutput']>, ParentType, ContextType, Partial<MutationCreateEventArgs>>;
   createNotification?: Resolver<Maybe<ResolversTypes['CreateNotificationOutput']>, ParentType, ContextType, Partial<MutationCreateNotificationArgs>>;
-  loginUser?: Resolver<Maybe<ResolversTypes['LoginUserOutput']>, ParentType, ContextType, Partial<MutationLoginUserArgs>>;
-  refreshUser?: Resolver<Maybe<ResolversTypes['LoginUserOutput']>, ParentType, ContextType, Partial<MutationRefreshUserArgs>>;
-  registerUser?: Resolver<Maybe<ResolversTypes['RegisterUserOutput']>, ParentType, ContextType, Partial<MutationRegisterUserArgs>>;
   updateEvent?: Resolver<Maybe<ResolversTypes['CreateEventOutput']>, ParentType, ContextType, Partial<MutationUpdateEventArgs>>;
 }>;
 
 export type NotificationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Notification'] = ResolversParentTypes['Notification']> = ResolversObject<{
   amount?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   details?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  eventid?: Resolver<Maybe<ResolversTypes['ID']>, ParentType, ContextType>;
-  id?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  eventId?: Resolver<Maybe<ResolversTypes['ID']>, ParentType, ContextType>;
+  id?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   isCompleted?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
   nextDate?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   paidDate?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  tag?: Resolver<Maybe<Array<Maybe<ResolversTypes['String']>>>, ParentType, ContextType>;
   title?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = ResolversObject<{
+  doMigration?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, Partial<QueryDoMigrationArgs>>;
   fetchEvents?: Resolver<Maybe<ResolversTypes['FetchEventsOutput']>, ParentType, ContextType, Partial<QueryFetchEventsArgs>>;
   fetchNotifications?: Resolver<Maybe<ResolversTypes['FetchNotificationsOutput']>, ParentType, ContextType, Partial<QueryFetchNotificationsArgs>>;
   fetchUsers?: Resolver<Maybe<ResolversTypes['FetchUsersOutput']>, ParentType, ContextType, Partial<QueryFetchUsersArgs>>;
+  getLoggedUser?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>;
 }>;
 
 export type RegisterUserOutputResolvers<ContextType = any, ParentType extends ResolversParentTypes['RegisterUserOutput'] = ResolversParentTypes['RegisterUserOutput']> = ResolversObject<{
@@ -411,10 +407,7 @@ export type RegisterUserOutputResolvers<ContextType = any, ParentType extends Re
 
 export type UserResolvers<ContextType = any, ParentType extends ResolversParentTypes['User'] = ResolversParentTypes['User']> = ResolversObject<{
   display?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  id?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   mobile?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
-  password?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  role?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
