@@ -26,7 +26,7 @@ export default gql`
     isCompleted: Boolean
     title: String
     tag: [String]
-    eventid: ID
+    eventId: ID
   }
 
   type User {
@@ -80,7 +80,8 @@ export default gql`
     nextDate: String
     isCompleted: Boolean
     title: String
-    eventid: ID
+    eventId: ID
+    success: Boolean
   }
 
   type FetchNotificationsOutput {
@@ -119,11 +120,11 @@ export default gql`
     id: String
     amount: Int
     details: String
-    createdDate: String
+    paidDate: String
     nextDate: String
     isCompleted: Boolean
     title: String
-    eventId: Int
+    eventId: String
   }
 
   input UpdateEventInput {

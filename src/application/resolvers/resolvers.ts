@@ -1,4 +1,5 @@
 import _ from "lodash";
+import moment from "moment"
 import {
   EventController,
   NotificationController,
@@ -165,6 +166,34 @@ const resolvers = {
       throw new Error(error);
      }
     },
+    createNotification: async (parent, args, context) => {
+      try {
+      //  const user = await userService.find({mobileNumber: 680});
+       // console.log(context?.isAuthenticated.username);
+       let crateNotificationInput = {
+         ...args.input
+       }
+ 
+       if(crateNotificationInput.nextDate) {
+         const nextDate = new Date(args.input.nextDate);
+         crateNotificationInput.nextDate = nextDate.toISOString();
+       } else {
+         crateNotificationInput.nextDate = null;
+       }
+ 
+       if(crateNotificationInput.paidDate) {
+         const endDate = new Date(args.input.paidDate);
+         crateNotificationInput.paidDate = endDate.toISOString();
+       } else {
+         crateNotificationInput.paidDate = null;
+       }
+ 
+       const event = await notificationService.create({...crateNotificationInput });
+       return withSuccess(event);
+      } catch (error) {
+       throw new Error(error);
+      }
+     },
     registerUser: async (parent, args, context) => {
       try {
         const userInput: IUserCreateDto = {
@@ -188,6 +217,22 @@ const resolvers = {
         throw new Error(error);
       }
     }
+  },
+  Notification: {
+    nextDate: (obj, args, context, info) => {
+      try {
+        return moment(obj.nextDate).format("YYYY-MM-DD")
+      } catch (error) {
+        throw new Error(error);
+      }
+    },
+    paidDate: (obj, args, context, info) => {
+      try {
+        return moment(obj.paidDate).format("YYYY-MM-DD")
+      } catch (error) {
+        throw new Error(error);
+      }
+    },
   },
 };
 
