@@ -39,6 +39,7 @@ model Notification {
   nextDate    DateTime?
   isCompleted Boolean
   title       String
+  type        EventType @default(DEBIT)
   tag         String[]
   eventId     String   @db.ObjectId
   event       Event    @relation(fields: [eventId], references: [id])

@@ -30,7 +30,19 @@ export class GenericRepository<T> implements IRepository<T> {
               return notification ? notification.paidDate.getFullYear() : null
             },
           }
-        },
+        }
+      },
+    })
+    .$extends({
+      result: {
+        event: {
+          nextDateMonth: {
+            needs: { },
+            compute(event) {
+              return null
+            },
+          }
+        }
       },
     });
     this.model = client[modalName];

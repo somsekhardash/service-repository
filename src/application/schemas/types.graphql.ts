@@ -27,6 +27,7 @@ export default gql`
     title: String
     tag: [String]
     eventId: ID
+    type: String
   }
 
   type User {
@@ -44,6 +45,7 @@ export default gql`
       title: String
       startDate: String
       frequency: String
+      nextDate: String
     ): FetchEventsOutput
 
     fetchNotifications(
@@ -61,6 +63,7 @@ export default gql`
     createEvent(input: CreateEventInput): CreateEventOutput
     createNotification(input: CreateNotificationInput): CreateNotificationOutput
     updateEvent(input: UpdateEventInput): CreateEventOutput
+    updateNotification(input: UpdateNotificationInput): CreateNotificationOutput
   }
 
   type FetchEventsOutput {
@@ -73,14 +76,7 @@ export default gql`
   }
 
   type CreateNotificationOutput {
-    id: String
-    amount: Int
-    details: String
-    createdDate: String
-    nextDate: String
-    isCompleted: Boolean
-    title: String
-    eventId: ID
+    success: Boolean
   }
 
   type FetchNotificationsOutput {
@@ -119,16 +115,19 @@ export default gql`
     id: String
     amount: Int
     details: String
-    createdDate: String
+    paidDate: String
     nextDate: String
     isCompleted: Boolean
     title: String
-    eventId: Int
+    eventId: String
   }
 
   input UpdateEventInput {
     data: CreateEventInput
-    findI: CreateEventInput
+  }
+
+  input UpdateNotificationInput {
+    data: CreateNotificationInput
   }
 
   input RegisterUserInput {

@@ -35,9 +35,6 @@ export class Database {
 
 const database = Database.getInstance();
 const client = database.getClient();
-// // console.log("I am heree");
-// // console.log(client);
-// // const prisma = new PrismaClient();
 
 export default {
   client

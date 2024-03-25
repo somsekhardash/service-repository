@@ -141,29 +141,56 @@ const resolvers = {
      try {
       const user = await userService.find({mobileNumber: 680});
       // console.log(context?.isAuthenticated.username);
-      let ctrateEventInput = {
+      let createEventInput = {
         ...args.input
       }
 
-      if(ctrateEventInput.startDate) {
+      if(createEventInput.startDate) {
         const startDate = new Date(args.input.startDate);
-        ctrateEventInput.startDate = startDate.toISOString();
+        createEventInput.startDate = startDate.toISOString();
       } else {
-        ctrateEventInput.startDate = null;
+        createEventInput.startDate = null;
       }
 
-      if(ctrateEventInput.endDate) {
+      if(createEventInput.endDate) {
         const endDate = new Date(args.input.endDate);
-        ctrateEventInput.endDate = endDate.toISOString();
+        createEventInput.endDate = endDate.toISOString();
       } else {
-        ctrateEventInput.endDate = null;
+        createEventInput.endDate = null;
       }
 
-      const event = await eventService.create({...ctrateEventInput, userId:user[0].id });
+      const event = await eventService.create({...createEventInput, userId:user[0].id });
       return withSuccess(event);
      } catch (error) {
       throw new Error(error);
      }
+    },
+    createNotification: async (parent, args, context) => {
+      try {
+        let createNotificationInput = {
+          ...args.input
+        };
+
+        if(createNotificationInput.paidDate) {
+          const paidDate = new Date(args.input.paidDate);
+          createNotificationInput.paidDate = paidDate.toISOString();
+        } else {
+          createNotificationInput.paidDate = null;
+        }
+
+        if(createNotificationInput.nextDate) {
+          const nextDate = new Date(args.input.nextDate);
+          createNotificationInput.nextDate = nextDate.toISOString();
+        } else {
+          createNotificationInput.nextDate = null;
+        }
+
+        const notification = await notificationService.create({...createNotificationInput });
+        return withSuccess(notification);
+        
+      } catch (error) {
+        throw new Error(error);
+      }
     },
     registerUser: async (parent, args, context) => {
       try {
@@ -178,6 +205,73 @@ const resolvers = {
         throw new Error(error);
       }
     },
+    updateEvent: async (parent, args, context) => {
+      try {
+        let createEventInput = {
+          ...args.input.data
+        }
+ 
+        const event: any = await eventService.find({id: createEventInput.id});
+        // console.log(context?.isAuthenticated.username);
+
+        if(!event[0].id) {
+          throw new Error("Event Not Found !!");
+        }
+         
+        if(createEventInput.startDate) {
+          const startDate = new Date(createEventInput.startDate);
+          createEventInput.startDate = startDate.toISOString();
+        } 
+  
+        if(createEventInput.endDate) {
+          const endDate = new Date(createEventInput.endDate);
+          createEventInput.endDate = endDate.toISOString();
+        } 
+
+        const {id, ...rest} = createEventInput;
+        const newEvent = await eventService.update(id ,rest);
+        return withSuccess(newEvent);
+      } catch (error) {
+        throw new Error(error);
+      }
+    },
+    updateNotification: async (parent, args, context) => {
+      try {
+        let updateNotificationInput = {
+          ...args.input.data
+        }
+ 
+        const notification: any = await notificationService.find({id: updateNotificationInput.id});
+
+        console.log(notification, "notification");
+
+        if(!notification[0]?.id) {
+          throw new Error("Notification Not Found !!");
+        }
+         
+        if(updateNotificationInput.createdDate) {
+          const paidDate = new Date(updateNotificationInput.createdDate);
+          updateNotificationInput.paidDate = paidDate.toISOString();
+          delete updateNotificationInput.createdDate;
+        } 
+  
+        if(updateNotificationInput.nextDate) {
+          const nextDate = new Date(updateNotificationInput.nextDate);
+          updateNotificationInput.nextDate = nextDate.toISOString();
+        } 
+
+        if(!updateNotificationInput.nextDate) {
+          delete updateNotificationInput.nextDate;
+        }
+
+        const {id, ...rest} = updateNotificationInput;
+        
+        const newEvent = await notificationService.update(id ,rest);
+        return withSuccess(newEvent);
+      } catch (error) {
+        throw new Error(error);
+      }
+    }
   },
   Event: {
     notifications: async (obj, args, context, info) => {
