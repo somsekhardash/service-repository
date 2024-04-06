@@ -64,6 +64,8 @@ export default gql`
     createNotification(input: CreateNotificationInput): CreateNotificationOutput
     updateEvent(input: UpdateEventInput): CreateEventOutput
     updateNotification(input: UpdateNotificationInput): CreateNotificationOutput
+    deleteEvent(id: String): CreateEventOutput
+    deleteNotification(id: String): CreateNotificationOutput
   }
 
   type FetchEventsOutput {

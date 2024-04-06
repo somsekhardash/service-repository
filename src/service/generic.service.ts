@@ -21,12 +21,12 @@ export class GenericService<T> {
       return await this.genericRepository.create(entity);
     }
   
-    async update(id: number, entity: any): Promise<void> {
-      await this.genericRepository.update(id, entity);
+    async update(id: any, entity: any): Promise<T> {
+      return await this.genericRepository.update(id, entity);
     }
   
-    async delete(id: number): Promise<void> {
-      // await this.genericRepository.delete(id);
+    async delete(id: number): Promise<T> {
+      return await this.genericRepository.delete(id);
     }
 
     async find(entity: Partial<T>): Promise<T[]> {

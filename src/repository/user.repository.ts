@@ -1,5 +1,5 @@
 import { GenericRepository } from "./generic.repository";
-import database, { IUserDocument } from "../database";
+// import database, { IUserDocument } from "../database";
 import {  User } from '@prisma/client';
 
 export class UserRepository extends GenericRepository<User> {

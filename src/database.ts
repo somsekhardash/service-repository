@@ -1,44 +1,44 @@
-import { PrismaClient } from "@prisma/client";
+// import { PrismaClient } from "@prisma/client";
 
-export class Database {
-  private static _instance: Database = new Database();
-  private client = new PrismaClient().$extends({
-    result: {
-      notification: {
-        paidDateMonth: {
-          needs: { paidDate: true },
-          compute(notification) {
-            const d = new Date(String(notification));
-            return notification ? d.getMonth() : null
-          },
-        },
-      },
-    },
-  });
+// export class Database {
+//   private static _instance: Database = new Database();
+//   private client = new PrismaClient().$extends({
+//     result: {
+//       notification: {
+//         paidDateMonth: {
+//           needs: { paidDate: true },
+//           compute(notification) {
+//             const d = new Date(String(notification));
+//             return notification ? d.getMonth() : null
+//           },
+//         },
+//       },
+//     },
+//   });
 
-  constructor() {
-    if (Database._instance) {
-      throw new Error(
-        "Error: Instantiation failed: Use Database.getInstance() instead of new."
-      );
-    }
-  }
+//   constructor() {
+//     if (Database._instance) {
+//       throw new Error(
+//         "Error: Instantiation failed: Use Database.getInstance() instead of new."
+//       );
+//     }
+//   }
 
-  static getInstance(): Database {
-    return Database._instance;
-  }
+//   static getInstance(): Database {
+//     return Database._instance;
+//   }
 
-  public getClient() {
-    this.client;
-  }
-}
+//   public getClient() {
+//     this.client;
+//   }
+// }
 
-const database = Database.getInstance();
-const client = database.getClient();
+// const database = Database.getInstance();
+// const client = database.getClient();
 
-export default {
-  client
-};
+// export default {
+//   client
+// };
 
 
 export interface IBaseDocument {

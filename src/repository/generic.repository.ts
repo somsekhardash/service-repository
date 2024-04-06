@@ -32,18 +32,6 @@ export class GenericRepository<T> implements IRepository<T> {
           }
         }
       },
-    })
-    .$extends({
-      result: {
-        event: {
-          nextDateMonth: {
-            needs: { },
-            compute(event) {
-              return null
-            },
-          }
-        }
-      },
     });
     this.model = client[modalName];
   }

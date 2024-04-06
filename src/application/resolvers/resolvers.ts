@@ -186,8 +186,13 @@ const resolvers = {
         }
 
         const notification = await notificationService.create({...createNotificationInput });
+
+        const foundEvent = await eventService.find({id: notification.eventId});
+        if(foundEvent[0] && (new Date(notification.nextDate) >  new Date(foundEvent[0].nextDate))) {
+            const result  = await eventService.update(notification.eventId, {nextDate: notification.nextDate});
+            console.log(result);
+        }
         return withSuccess(notification);
-        
       } catch (error) {
         throw new Error(error);
       }
@@ -235,6 +240,17 @@ const resolvers = {
         throw new Error(error);
       }
     },
+    deleteNotification: async (parent, args, context) => {
+      try {
+        const notification = await notificationService.delete(args.id);
+        if(!!notification)
+          return withSuccess(notification);
+        else 
+          throw new Error("Something went wrong");
+      } catch (error) {
+        throw new Error(error);
+      }
+    },
     updateNotification: async (parent, args, context) => {
       try {
         let updateNotificationInput = {
@@ -268,6 +284,17 @@ const resolvers = {
         
         const newEvent = await notificationService.update(id ,rest);
         return withSuccess(newEvent);
+      } catch (error) {
+        throw new Error(error);
+      }
+    },
+    deleteEvent: async (parent, args, context) => {
+      try {
+        const event = await eventService.delete(args.id);
+        if(!!event)
+          return withSuccess(event);
+        else 
+          throw new Error("Something went wrong");
       } catch (error) {
         throw new Error(error);
       }

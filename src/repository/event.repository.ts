@@ -11,7 +11,7 @@ export class EventRepository extends GenericRepository<Event> {
         return await this.model.findMany({
           where: {
             nextDate: {
-              lte: data.nextDate
+              gte: data.nextDate
             }
           }
         });
