@@ -27,7 +27,7 @@ jobs:
       - name: Delete Old container if exists
         run: docker rm -f my-node-js-container
       - name: Run Docker container
-        run: docker run -d -p 5200:5200 --name my-node-js-container dashsomsekhar/memo-image:latest
+        run: docker run -d -p 5050:5050 --name my-node-js-container dashsomsekhar/memo-image:latest
 
 
       
