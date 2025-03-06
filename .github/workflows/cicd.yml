@@ -1,34 +1,12 @@
-name: Deploy Node Application
+name: Welcome
 
-on:
-  push:
-    branches:
-      - main
-
+on: workflow_dispatch
+ 
 jobs:
-  build:
+  firstjob:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout source
-        uses: actions/checkout@v4
-      - name: Login to docker hub
-        run: docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}  
-      - name: Build Docker Image
-        run: docker build -t dashsomsekhar/memo-image .
-      - name: Publish Image to Docker Hub
-        run: docker push dashsomsekhar/memo-image:latest
-
-  deploy:
-    needs: build
-    runs-on: self-hosted
-    steps:
-      - name: Pull Image from docker hub
-        run: docker pull dashsomsekhar/memo-image:latest
-      - name: Delete Old container if exists
-        run: docker rm -f my-node-js-container
-      - name: Run Docker container
-        run: docker run -d -p 5050:5050 --name my-node-js-container dashsomsekhar/memo-image:latest
-
-
-      
-
+      - name: Welcome Note
+        run: echo 'HI'
+      - name: Buy Buy Note
+        run: echo 'Buy'
