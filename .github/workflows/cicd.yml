@@ -10,3 +10,7 @@ jobs:
         run: echo 'HI'
       - name: Buy Buy Note
         run: echo 'Buy'
+      - name: MultiLine command
+        run: |
+          echo "First output"
+          echo "Second output"
