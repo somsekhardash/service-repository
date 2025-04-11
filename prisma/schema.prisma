@@ -2,17 +2,17 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
-  provider = "prisma-client-js"
-  binaryTargets = ["native", "rhel-openssl-3.0.x", "rhel-openssl-3.0.x", "debian-openssl-3.0.x"]
+  provider        = "prisma-client-js"
+  previewFeatures = ["driverAdapters"]
 }
 
 datasource db {
-  provider = "mongodb"
-  url      = "mongodb+srv://sdash:Value*123@somcluster.1cyvrwm.mongodb.net/test?retryWrites=true&w=majority"
+  provider = "postgresql"
+  url      = "postgresql://user:pass@localhost:5432/mydb?connection_limit=5&socket_timeout=3"
 }
 
 model Event {
-  id           String         @id @default(auto()) @map("_id") @db.ObjectId
+  id           String         @id @default(uuid())
   name         String
   description  String
   type         EventType
@@ -24,7 +24,7 @@ model Event {
   default      Int? 
   frequency    EventFrequency
   user         User           @relation(fields: [userId], references: [id])
-  userId       String         @db.ObjectId
+  userId       String         
   notification Notification[]
   createdAt    DateTime       @default(now())
   updatedAt    DateTime       @updatedAt
@@ -33,7 +33,7 @@ model Event {
 }
 
 model Notification {
-  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  id          String   @id @default(uuid())
   amount      Int
   details     String
   paidDate    DateTime?
@@ -42,7 +42,7 @@ model Notification {
   title       String
   type        EventType @default(DEBIT)
   tag         String[]
-  eventId     String   @db.ObjectId
+  eventId     String   
   event       Event    @relation(fields: [eventId], references: [id])
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
@@ -51,7 +51,7 @@ model Notification {
 }
 
 model User {
-  id           String   @id @default(auto()) @map("_id") @db.ObjectId
+  id           String   @id @default(uuid())
   mobileNumber Int
   userName     String
   passWord     String

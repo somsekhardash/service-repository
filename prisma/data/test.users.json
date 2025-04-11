@@ -1,0 +1,11 @@
+[{
+  "id": "658a66f957a3f7fb6b53567c",
+  "mobileNumber": 680,
+  "userName": "dash",
+  "passWord": "4aefa119d42e7a2e9c8610fa88924d30c6a554d250b6e1ea2fd777dc7679bb05",
+  "role": "USER",
+  "createdAt": "2023-12-26T05:39:04.656Z",
+  "updatedAt": "2023-12-26T13:33:43.079Z",
+  "salt": "55b6ce6bd8de392f81bc69c5978dc7b9a4228752b7eec95be350e2e2f9c260eb",
+  "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImRhc2giLCJpYXQiOjE3MDM1OTc2MjMsImV4cCI6MTcwMzY4NDAyM30._dRWR_bY-hE2WG8in96niyBOB3YugKY2GcStvEOvLfQ"
+}]
